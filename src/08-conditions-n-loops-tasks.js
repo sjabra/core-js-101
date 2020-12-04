@@ -331,8 +331,20 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const openBrackets = ['[', '(', '{', '<'];
+  const closeBrackets = [']', ')', '}', '>'];
+  const unbalancedBrackets = [];
+
+  for (let i = 0; i < str.length; i += 1) {
+    const closeBracketIndex = closeBrackets.indexOf(str[i]);
+    if (closeBracketIndex === -1) {
+      unbalancedBrackets.push(str[i]);
+    } else if (unbalancedBrackets.pop() !== openBrackets[closeBracketIndex]) {
+      return false;
+    }
+  }
+  return unbalancedBrackets.length === 0;
 }
 
 /**
@@ -403,8 +415,18 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const arr = Array(m1.length)
+    .fill(0)
+    .map(() => Array(m2[0].length).fill(0));
+
+  function calcProduct(m1Row, m2ColumnIndex) {
+    return m1Row.reduce(
+      (product, m1Value, m1ValueIndex) => product + m1Value * m2[m1ValueIndex][m2ColumnIndex],
+      0,
+    );
+  }
+  return arr.map((row, rowIndex) => row.map((_, colIndex) => calcProduct(m1[rowIndex], colIndex)));
 }
 
 /**
@@ -437,8 +459,28 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  function isWinner(symbol) {
+    const getLine = (lines) => lines.filter(
+      (row) => row.filter((value) => value === symbol).length === 3,
+    );
+
+    const getColumns = () => position.map((_, index, arr) => arr.map((row) => row[index]));
+
+    const getDiagonal = () => [
+      [position[0][0], position[1][1], position[2][2]],
+      [position[2][0], position[1][1], position[0][2]],
+    ];
+
+    return (
+      (getLine(position).length
+        || getLine(getColumns()).length
+        || getLine(getDiagonal()).length)
+      && symbol
+    );
+  }
+
+  return isWinner('0') || isWinner('X') || undefined;
 }
 
 module.exports = {

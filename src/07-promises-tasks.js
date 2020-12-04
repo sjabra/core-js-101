@@ -56,7 +56,7 @@ function willYouMarryMe(isPositiveAnswer) {
 function processAllPromises(array) {
   return new Promise((resolve, reject) => {
     const plainArr = [];
-    array.forEach((item) => item.then((res) => plainArr.push(res)));
+    array.forEach((item) => item.then((res) => plainArr.push(res)).catch((err) => err));
     resolve(plainArr);
     reject(new Error('Error processing promises'));
   });
